@@ -1,0 +1,20 @@
+name: ci
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - main
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    name: CI
+    steps:
+      - uses: actions/checkout@v3
+      - uses: azure/setup-helm@v1 # v1
+        with:
+          version: v3.9.4
+      - name: Set up chart-testing
+        uses: helm/chart-testing-action@afea100a513515fbd68b0e72a7bb0ae34cb62aec
+      - name: Run chart-testing (lint)
+        run: ct lint --target-branch main --config .github/ct-lint.yaml

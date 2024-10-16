@@ -1,0 +1,37 @@
+name: merge
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+    paths:
+      - '**/Chart.yaml'
+jobs:
+  merge:
+    if: github.event.pull_request.merged == true && endsWith(github.head_ref, '_am')
+    runs-on: ubuntu-latest
+    steps:
+      - id: generate_token
+        uses: tibdex/github-app-token@32691ba7c9e7063bd457bd8f2a5703138591fa58 # v1.9.0
+        with:
+          app_id: ${{ secrets.ACD_APP_ID }}
+          private_key: ${{ secrets.ACD_PRIVATE_KEY }}
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        with:
+          repository: ${{ github.repository_owner }}/chart-config
+          token: ${{ steps.generate_token.outputs.token }}
+      - env:
+          GH_TOKEN: ${{ steps.generate_token.outputs.token }}
+        run: |
+          JIRA=$(echo "${{ github.event.issue.title }}" | sed -nr 's/.*(EN-[0-9]+).*/\1/p');
+          if [ "${JIRA}" = "" ]; then
+            echo "⚠️jira tag was unable to be processed" >> $GITHUB_STEP_SUMMARY && exit 1;
+          fi
+          
+          gh release download acd-v0.0.28 -R ${{ github.repository_owner }}/acd-cli --skip-existing && chmod +x ./acd;
+          if [ ! -f ./acd ]; then
+            echo "⚠️binary was unable to be retrieved" >> $GITHUB_STEP_SUMMARY && exit 1;
+          fi
+          
+          ./acd create-automerge-pr --repository="${{ github.event.repository.name }}" --pull-request="${{ github.event.issue.number }}" --jira="${JIRA}" --environments="orca";
