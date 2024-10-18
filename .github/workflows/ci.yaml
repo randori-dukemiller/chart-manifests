@@ -11,6 +11,8 @@ jobs:
     name: CI
     steps:
       - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - uses: azure/setup-helm@v1 # v1
         with:
           version: v3.9.4
