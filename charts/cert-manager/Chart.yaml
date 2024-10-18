@@ -4,6 +4,8 @@ description: cert-manager
 type: application
 version: 0.0.0
 appVersion: v0.00.0
+maintainers:
+  - name: name
 dependencies:
 - name: cert-manager
   version: v1.13.1
