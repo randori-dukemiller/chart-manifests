@@ -36,4 +36,4 @@ jobs:
           fi
           
           BRANCH="${JIRA}_${PR}_am"
-          ./acd create-automerge-pr --repository="app-manifests" --pull-request="${PR}" --jira="${JIRA}" --branch="${BRANCH}" --environments="orca";
+          ./acd create-automerge-pr --repository="chart-manifests" --pull-request="${PR}" --jira="${JIRA}" --branch="${BRANCH}" --environments="orca";
