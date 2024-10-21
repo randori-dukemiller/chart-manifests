@@ -23,9 +23,9 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
       - env:
           GH_TOKEN: ${{ steps.generate_token.outputs.token }}
-          PR: ${{ github.event.issue.number }}
+          PR: ${{ github.event.pull_request.number }}
         run: |
-          JIRA=$(echo "${{ github.event.issue.title }}" | sed -nr 's/.*(EN-[0-9]+).*/\1/p');
+          JIRA=$(echo "${{ github.event.pull_request.title }}" | sed -nr 's/.*(EN-[0-9]+).*/\1/p');
           if [ "${JIRA}" = "" ]; then
             echo "⚠️jira tag was unable to be processed" >> $GITHUB_STEP_SUMMARY && exit 1;
           fi
@@ -36,4 +36,4 @@ jobs:
           fi
           
           BRANCH="${JIRA}_${PR}_am"
-          ./acd create-automerge-pr --repository="${{ github.event.repository.name }}" --pull-request="${PR}" --jira="${JIRA}" --branch="${BRANCH}" --environments="orca";
+          ./acd create-automerge-pr --repository="app-manifests" --pull-request="${PR}" --jira="${JIRA}" --branch="${BRANCH}" --environments="orca";
