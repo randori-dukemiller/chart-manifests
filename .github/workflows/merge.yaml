@@ -36,4 +36,6 @@ jobs:
           fi
           
           BRANCH="${JIRA}_${PR}_am"
+          git config user.name "dmill-pr-bot[bot]";
+          git config user.email "131386235+dmill-pr-bot[bot]@users.noreply.github.com";
           ./acd create-automerge-pr --repository="chart-manifests" --pull-request="${PR}" --jira="${JIRA}" --branch="${BRANCH}" --environments="orca";
