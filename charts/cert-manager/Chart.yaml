@@ -2,11 +2,11 @@ apiVersion: v2
 name: cert-manager
 description: cert-manager
 type: application
-version: 0.0.0
+version: 0.0.1
 appVersion: v0.00.0
 maintainers:
   - name: name
 dependencies:
 - name: cert-manager
-  version: v1.13.1
+  version: v1.13.6
   repository: https://charts.jetstack.io
