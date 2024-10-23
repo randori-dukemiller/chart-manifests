@@ -16,6 +16,4 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
       - env:
           GH_TOKEN:  ${{ steps.generate_token.outputs.token }}
-        run: |
-          gh pr review --approve
-          gh pr merge --merge --auto
+        run: gh pr review --approve
